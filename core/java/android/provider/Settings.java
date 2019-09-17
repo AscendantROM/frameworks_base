@@ -4833,6 +4833,20 @@ public final class Settings {
         /** Descendant Guardia Exclude System Apps **/
         public static final String DESCENDANT_GUARDIA_EXCLUDE_SYSTEM_APPS = "descendant_guardia_exclude_system_apps";
 
+        /**
+         * Setting to hold the current set overlay for color bucket.
+         * overlay package name (String)
+         * @hide
+         */
+        public static final String COLOR_BUCKET_OVERLAY = "color_bucket_overlay";
+
+        /**
+         * IMPORTANT: If you add a new public settings you also have to add it to
+         * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
+         * it to PRIVATE_SETTINGS below. Also add a validator that can validate
+         * the setting value. See an example above.
+         */
+
         /** Descendant Guardia Notif Type **/
         public static final String DESCENDANT_GUARDIA_TYPE_NOTIF = "descendant_guardia_type_notif";
 
@@ -5088,6 +5102,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_ARROW);
+            PRIVATE_SETTINGS.add(COLOR_BUCKET_OVERLAY);
         }
 
         /**
