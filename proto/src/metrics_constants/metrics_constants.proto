@@ -7442,5 +7442,7 @@ message MetricsEvent {
     // descendant metrics
     DESCENDANT_METRICS = 9999;
 
+    // Fluid Constants
+    FLUID = 450;
   }
 }
