@@ -186,7 +186,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private ImageView mRingerModeIcon;
     private TextView mRingerModeTextView;
     private View mRingerContainer;
-    private TextClock mClockView;
+    private Clock mClockView;
     private DateView mDateView;
     private TextView mWeatherDegrees;
     private TextView mWeatherCity;
@@ -300,14 +300,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mRingerModeIcon.setImageTintList(ColorStateList.valueOf(fillColor));
 
         mClockView = findViewById(R.id.clock);
-        m24ClockLand = "<strong>HH</strong>:mm";
-        m12ClockLand = "<strong>hh</strong>:mm";
-        m24Clock = "<strong>HH</strong><br>mm";
-        m12Clock = "<strong>hh</strong><br>mm";
-        m24easterClock = "<strong><font color='#0069ba'>HH</font></strong><br>mm";
-        m12easterClock = "<strong><font color='#0069ba'>hh</font></strong><br>mm";
-        mClockView.setFormat12Hour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 11 ? Html.fromHtml(m12easterClock) : Html.fromHtml(m12Clock));
-        mClockView.setFormat24Hour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 11 ? Html.fromHtml(m24easterClock) : Html.fromHtml(m24Clock));
         mClockView.setOnClickListener(this);
         mDateView = findViewById(R.id.date);
         mWeatherCity = findViewById(R.id.weather_city);
@@ -433,8 +425,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateStyles(boolean isLandscape) {
-        mClockView.setFormat12Hour(isLandscape ? Html.fromHtml(m12ClockLand) : Html.fromHtml(m12Clock));
-        mClockView.setFormat24Hour(isLandscape ? Html.fromHtml(m24ClockLand) : Html.fromHtml(m24Clock));
         mDateView.setVisibility(isLandscape ? View.GONE : View.VISIBLE);
         mClockView.setTextAppearance(mContext,isLandscape ? R.style.TextAppearance_ClockQSHeaderLand : R.style.TextAppearance_ClockQSHeader);
         mDateView.setTextAppearance(mContext,isLandscape ? R.style.TextAppearance_DateQSHeaderLand : R.style.TextAppearance_DateQSHeader);
@@ -473,7 +463,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 lightTheme ? R.style.Theme_SystemUI_Light : R.style.Theme_SystemUI);
         final @ColorInt int textColor =
                 Utils.getColorAttrDefaultColor(context, R.attr.wallpaperTextColor);
-        mClockView.setTextColor(textColor);
         mDateView.setTextColor(textColor);
         mWeatherDegrees.setTextColor(textColor);
         mWeatherCity.setTextColor(textColor);
@@ -598,21 +587,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         }).alpha(0);
     }
 
-    private void easterCheck() {
-        if (mIsLandscape) return;
-        mClockView.setFormat12Hour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 11 ? Html.fromHtml(m12easterClock) : Html.fromHtml(m12Clock));
-        mClockView.setFormat24Hour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) == 11 ? Html.fromHtml(m24easterClock) : Html.fromHtml(m24Clock));
-    }
-
-    private BroadcastReceiver mTickReceiver = new BroadcastReceiver(){
-        @Override
-            public void onReceive(Context context, Intent intent) {
-                    if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-                                easterCheck();
-                    }
-            }
-    };
-
     public void dismissWeatherEx() {
         mWeatherWidgetClass.dismissDialog();
     }
@@ -633,7 +607,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         int qqsHeight = mContext.getResources().getDimensionPixelSize(
                 R.dimen.qs_quick_header_panel_height);
         qqsHeight += mContext.getResources().getDimensionPixelSize(
-                    R.dimen.brightness_mirror_height)
+                    R.dimen.quick_qs_extra_offset_heigth)
                     + mContext.getResources().getDimensionPixelSize(
                     R.dimen.qs_tile_margin_top);
         setMinimumHeight(sbHeight + qqsHeight);
@@ -773,7 +747,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         });
         mStatusBarIconController.addIconGroup(mIconManager);
         requestApplyInsets();
-        mContext.registerReceiver(mTickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
     @Override

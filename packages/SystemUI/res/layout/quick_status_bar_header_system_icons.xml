@@ -33,13 +33,19 @@
 
         <RelativeLayout android:id="@+id/rl_clock_date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp">
 
-            <TextClock
+            <com.android.systemui.statusbar.policy.Clock
                 android:id="@+id/clock"
                 style="@style/TextAppearance.ClockQSHeader"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:minWidth="48dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
 
             <com.android.systemui.statusbar.policy.DateView
                 android:id="@+id/date"
@@ -78,6 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_marginTop="4dp">
 
             <RelativeLayout android:id="@+id/weather_first_line"
@@ -124,8 +132,9 @@
             android:paddingRight="8dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_below="@id/rl_clock_date"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/qs_background_primary"
             android:clipChildren="false"
             android:clipToPadding="false"

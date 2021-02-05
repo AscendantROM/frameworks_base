@@ -19,7 +19,7 @@
     <style
         name="TextAppearance.ClockQSHeader">
         <item name="android:fontFamily">@*android:string/config_headlineFontFamilyMedium</item>
-        <item name="android:textColor">?attr/wallpaperTextColor</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">36dp</item>
     </style>
 
