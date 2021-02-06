@@ -132,7 +132,7 @@
             android:paddingRight="8dp"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/rl_clock_date"            
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/qs_background_primary"
