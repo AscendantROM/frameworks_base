@@ -146,7 +146,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     private QSPanel mQsPanel;
 
     private boolean mExpanded;
-    private boolean mEditClicked;
     private boolean mListening;
     private boolean mQsDisabled;
     private boolean mIsLandscape;
@@ -278,7 +277,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mRingerContainer.setOnClickListener(this::onClick);
         mCarrierGroup = findViewById(R.id.carrier_group);
         mEdit = findViewById(R.id.qqs_edit);
-        mEdit.setOnClickListener(this);
+        mEdit.setOnClickListener(view ->
+                mActivityStarter.postQSRunnableDismissingKeyguard(() ->
+                        showQSEdit(view)));
         mSettings = findViewById(R.id.qqs_settings);
         mSettings.setOnClickListener(this);
         mWeatherFL = findViewById(R.id.weather_first_line);
@@ -433,25 +434,14 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mWeatherCity.setVisibility(isLandscape ? View.GONE : View.VISIBLE);
         mWeatherDegrees.setVisibility(isLandscape ? View.GONE : View.VISIBLE);
         mWeatherIcon.setVisibility(isLandscape ? View.GONE : View.VISIBLE);
-        int qqsIconsMarginBottomPortrait = mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom);
-        int qqsIconsMarginBottomLand = mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom_land);
-        int qqsIconsMarginRight = mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_margin_right);
         if (isLandscape) {
-            setMargins(mSettings,0,qqsIconsMarginBottomLand,0,qqsIconsMarginBottomLand);
-            setMargins(mEdit,0,qqsIconsMarginBottomLand,qqsIconsMarginRight,0);
+            mSettings.setPadding(0,mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom_land),0,0);
+            mEdit.setPadding(0,mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom_land),0,0);
         } else {
-            setMargins(mSettings,0,0,0,qqsIconsMarginBottomPortrait);
-            setMargins(mEdit,0,0,qqsIconsMarginRight,qqsIconsMarginBottomPortrait);
+            mSettings.setPadding(0,0,0,mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom));
+            mEdit.setPadding(0,0,0,mContext.getResources().getDimensionPixelSize(R.dimen.qqs_edit_padding_bottom));
         }
 
-    }
-
-    private void setMargins (ImageView view, int left, int top, int right, int bottom) {
-        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            p.setMargins(left, top, right, bottom);
-            view.requestLayout();
-        }
     }
 
     public void updateDecorViews(boolean lightTheme) {
@@ -473,10 +463,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private void showQSEdit(View view) {
         mQsPanel.showEdit(view);
-    }
-
-    private void closeDetail() {
-        mQsPanel.closeDetail();
     }
 
     private void startSettingsActivity() {
@@ -864,20 +850,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 });
                 return;
             }
-            mSettings.animate().rotationBy(360).setDuration(400).start();
             startSettingsActivity();
-        } else if (v == mEdit) {
-            if (mQsPanel.isShowingCustomize()) {
-                mEdit.animate().cancel();
-                mEdit.setRotation(0);
-                mEdit.animate().rotationBy(-360).setDuration(400).start();
-                closeDetail();
-            } else {
-                mEdit.animate().cancel();
-                mEdit.setRotation(0);
-                mEdit.animate().rotationBy(360).setDuration(400).start();
-                mActivityStarter.postQSRunnableDismissingKeyguard(() ->showQSEdit(this));
-            }
         } else if (v == mQSBHEventListener) {
             if (mAlarmVisibleNow)
                 mActivityStarter.postStartActivityDismissingKeyguard(new Intent(
